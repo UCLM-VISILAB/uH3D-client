@@ -1,0 +1,343 @@
+@startuml
+set namespaceSeparator ::
+
+class "microhikari3D_flutter::main.dart::MicroHikari3sApp" {
+  +Widget* build()
+}
+
+class "microhikari3D_flutter::domain::steppers.dart::Steppers" {
+  +Uri uri
+  +double feedrate
+  +double xPos
+  +double yPos
+  +double zPos
+  +void updateState()
+  +Future<int> movexAxis()
+  +Future<int> movezAxis()
+  +Future<int> moveyAxis()
+  +Future<int> setFeedrate()
+  +Future<int> home()
+  +Future<int> center()
+  +Future<int> changeLens()
+}
+
+class "microhikari3D_flutter::domain::inference.dart::Inference" {
+  +Uri uri
+  +List<dynamic> models
+  +String model
+  +Future<List<dynamic>?> getResults()
+  +Future<String?> getLabeledResults()
+  +List<String> getModels()
+}
+
+class "microhikari3D_flutter::domain::arduino.dart::Arduino" {
+  +Uri uri
+  +bool bottomLight
+  +int red
+  +int green
+  +int blue
+  +int white
+  +void updateState()
+  +Future<int> setBottomLight()
+  +Future<int> setRGBringColor()
+  +Future<int> setRGBringtoWhite()
+}
+
+class "microhikari3D_flutter::domain::microscope.dart::Microscope" {
+  {static} +Uri uri
+  {static} +Steppers steppers
+  {static} +Camera camera
+  {static} +Arduino arduino
+  {static} +Inference inference
+  {static} +bool connected
+  {static} +double step
+  {static} +void setUriAddress()
+  {static} +Widget connectToMicro()
+  {static} +void disconnect()
+}
+
+"microhikari3D_flutter::domain::microscope.dart::Microscope" o-- "microhikari3D_flutter::domain::steppers.dart::Steppers"
+"microhikari3D_flutter::domain::microscope.dart::Microscope" o-- "microhikari3D_flutter::domain::camera.dart::Camera"
+"microhikari3D_flutter::domain::microscope.dart::Microscope" o-- "microhikari3D_flutter::domain::arduino.dart::Arduino"
+"microhikari3D_flutter::domain::microscope.dart::Microscope" o-- "microhikari3D_flutter::domain::inference.dart::Inference"
+
+class "microhikari3D_flutter::domain::camera.dart::Camera" {
+  +Uri uri
+  +int iso
+  +int sharpness
+  +int saturation
+  +int nfocus
+  +int fovx
+  +int fovy
+  +bool focusstack
+  +String filter
+  +double stepPerFov
+  +dynamic photoResolution
+  +dynamic streamResolution
+  +void updateState()
+  +Future<int> setISO()
+  +Future<int> setSharpness()
+  +Future<int> setSaturation()
+  +Future<int> setPhotoResolution()
+  +Future<int> setStreamResolution()
+  +Future<int> focus()
+  +Future<int> focusFine()
+  +Future<int?> takePhoto()
+  +Future<int?> takeFocusStackPhoto()
+  +Future<int?> takePanoramaPhoto()
+}
+
+class "microhikari3D_flutter::presentation::lights_panel.dart::LightsPanel" {
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::lights_panel.dart::LightSwitches" {
+  +_LightSwitchesState createState()
+}
+
+class "microhikari3D_flutter::presentation::lights_panel.dart::_LightSwitchesState" {
+  -bool _buttomLed
+  +void initState()
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::lights_panel.dart::ColorPickerWidget" {
+  +_ColorPickerWidgetState createState()
+}
+
+class "microhikari3D_flutter::presentation::lights_panel.dart::_ColorPickerWidgetState" {
+  +Color screenPickerColor
+  +Color dialogPickerColor
+  +Color dialogSelectColor
+  +Future<bool> colorPickerDialog()
+  +void initState()
+  +Widget build()
+}
+
+"microhikari3D_flutter::presentation::lights_panel.dart::_ColorPickerWidgetState" o-- "dart::ui::Color"
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::SettingsScreen" {
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::CameraSettingsWidget" {
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::SliderISOWidget" {
+  +_SliderWidgetISOState createState()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::_SliderWidgetISOState" {
+  -double _currentSliderValue
+  +int? getISOValuesFromState()
+  +double? getStateValuesFromISO()
+  +String getStringFromISOValue()
+  +void initState()
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::SliderSharpnessWidget" {
+  +_SliderSharpnessState createState()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::_SliderSharpnessState" {
+  -double _currentSliderValue
+  +void initState()
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::SliderSaturationWidget" {
+  +_SliderSaturationState createState()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::_SliderSaturationState" {
+  -double _currentSliderValue
+  +void initState()
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::PhotoResolutionPickerWidget" {
+  +_PhotoResolutionPickerWidgetState createState()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::_PhotoResolutionPickerWidgetState" {
+  +String dropdownValue
+  -int? _getIntFromDropdownValue()
+  +void initState()
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::StreamResolutionPickerWidget" {
+  +_StreamResolutionPickerWidgetState createState()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::_StreamResolutionPickerWidgetState" {
+  +String dropdownValue
+  -int? _getIntFromDropdownValue()
+  +void initState()
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::FilterPickerWidget" {
+  +_FilterPickerWidgetState createState()
+}
+
+class "microhikari3D_flutter::presentation::settings_screen.dart::_FilterPickerWidgetState" {
+  +String dropdownValue
+  -String? _getFilterFromDropdownValue()
+  -String? _getDropdownValueFromFilter()
+  +void initState()
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::ai_panel.dart::AiPanel" {
+  +_AiPanelState createState()
+}
+
+class "microhikari3D_flutter::presentation::ai_panel.dart::_AiPanelState" {
+  +Widget result
+  +Widget build()
+}
+
+"microhikari3D_flutter::presentation::ai_panel.dart::_AiPanelState" o-- "flutter::src::widgets::framework.dart::Widget"
+
+class "microhikari3D_flutter::presentation::ai_panel.dart::ModelPicker" {
+  +_ModelPickerState createState()
+}
+
+class "microhikari3D_flutter::presentation::ai_panel.dart::_ModelPickerState" {
+  +String? dropdownValue
+  +List<String>? models
+  +void initState()
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::camera_panel.dart::CameraButtonsPanel" {
+  +_CameraButtonsPanelState createState()
+}
+
+class "microhikari3D_flutter::presentation::camera_panel.dart::_CameraButtonsPanelState" {
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::camera_panel.dart::FocusStackWidget" {
+  +_FocusStackWidgetState createState()
+}
+
+class "microhikari3D_flutter::presentation::camera_panel.dart::_FocusStackWidgetState" {
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::camera_panel.dart::PanoramaWidget" {
+  +_PanoramaWidgetState createState()
+}
+
+class "microhikari3D_flutter::presentation::camera_panel.dart::_PanoramaWidgetState" {
+  -bool _focusstack
+  -Widget _panoButton()
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::camera_panel.dart::FocusStackNfocusPicker" {
+  +_FocusStackNfocusPickerState createState()
+}
+
+class "microhikari3D_flutter::presentation::camera_panel.dart::_FocusStackNfocusPickerState" {
+  +int? dropdownValue
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::camera_panel.dart::PanoramaFovXPicker" {
+  +_PanoramaFovXPickerState createState()
+}
+
+class "microhikari3D_flutter::presentation::camera_panel.dart::_PanoramaFovXPickerState" {
+  +int? dropdownValue
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::camera_panel.dart::PanoramaFovYPicker" {
+  +_PanoramaFovYPickerState createState()
+}
+
+class "microhikari3D_flutter::presentation::camera_panel.dart::_PanoramaFovYPickerState" {
+  +int? dropdownValue
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::welcome_screen.dart::WelcomeScreen" {
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::welcome_screen.dart::IpAddressInput" {
+  +_IpAddressInputState createState()
+}
+
+class "microhikari3D_flutter::presentation::welcome_screen.dart::_IpAddressInputState" {
+  -GlobalKey<FormState> _formKey
+  -String _ip
+  -String _lastIp
+  -Future<SharedPreferences> _prefs
+  -Future<String> _lastIpFuture
+  -Future<void> _saveIpAddress()
+  +void initState()
+  +Widget build()
+}
+
+"microhikari3D_flutter::presentation::welcome_screen.dart::_IpAddressInputState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+
+class "microhikari3D_flutter::presentation::steppers_panel.dart::StepperButtonsPanel" {
+  +_StepperButtonsPanelState createState()
+}
+
+class "microhikari3D_flutter::presentation::steppers_panel.dart::_StepperButtonsPanelState" {
+  +String xPos
+  +String yPos
+  +String zPos
+  +Widget textDataStepper()
+  +Widget dpadWidget()
+  +Widget upDownWidget()
+  +Widget centralButtonsWidget()
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::steppers_panel.dart::SpeedPicker" {
+  +_SpeedPickerState createState()
+}
+
+class "microhikari3D_flutter::presentation::steppers_panel.dart::_SpeedPickerState" {
+  +String dropdownValue
+  -int? _getIntFromDropdownValue()
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::steppers_panel.dart::StepPicker" {
+  +_StepPickerState createState()
+}
+
+class "microhikari3D_flutter::presentation::steppers_panel.dart::_StepPickerState" {
+  +String dropdownValue
+  -double? _getIntFromDropdownValue()
+  +Widget build()
+}
+
+class "microhikari3D_flutter::presentation::home_screen.dart::HomeScreen" {
+  +_HomeScreenState createState()
+}
+
+class "microhikari3D_flutter::presentation::home_screen.dart::_HomeScreenState" {
+  -int _selectedIndex
+  +String videoUri
+  {static} -List<Widget> _widgetOptions
+  -void _onItemTapped()
+  -void _requestPermission()
+  +void initState()
+  +void dispose()
+  -Widget _portraitView()
+  -Widget _landscapeView()
+  +Widget build()
+}
+
+
+@enduml

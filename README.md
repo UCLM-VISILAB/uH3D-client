@@ -1,2 +1,4 @@
-# uH3D-client
-MicroHikari3D project - Client SW
+# MicroHikari3D 
+
+APP del microscopio MicroHikari3D
+
